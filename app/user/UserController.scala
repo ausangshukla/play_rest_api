@@ -10,7 +10,7 @@ import controllers._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UserController @Inject()(userAction: AuthAction.UserAction, jwtAction: AuthAction.JWTAction, cc: ControllerComponents, repo: UserRepository, jwtUtils: JwtUtils)(implicit ec: ExecutionContext) 
+class UserController @Inject()(jwtAction: AuthAction.JWTAction, cc: ControllerComponents, repo: UserRepository, jwtUtils: JwtUtils)(implicit ec: ExecutionContext) 
 extends AbstractController(cc) {
 
     private val logger:Logger = Logger(this.getClass())
@@ -19,10 +19,6 @@ extends AbstractController(cc) {
     def index = (jwtAction).async { request =>
 
         logger.debug(s"Requested by ${request.user}")
-        request.headers.get("authorization").map {token => 
-            val claims = jwtUtils.decodePayload(token)
-            logger.info(s"index $claims")
-        }
         repo.list().map { users =>
             Ok(Json.toJson(users))
         }

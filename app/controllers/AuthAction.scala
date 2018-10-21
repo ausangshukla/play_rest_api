@@ -17,43 +17,7 @@ case class UserRequest[A](user: User, request: Request[A])
     extends WrappedRequest(request)
 
 object AuthAction {
-
-  class UserAction @Inject()(
-      val parser: BodyParsers.Default,
-      jwtUtils: JwtUtils,
-      userRepo: UserRepository)(implicit val executionContext: ExecutionContext)
-      extends ActionBuilder[UserRequest, AnyContent]
-      with ActionTransformer[Request, UserRequest] {
-
-    private val logger: Logger = Logger(this.getClass())
-
-    def transform[A](request: Request[A]) = Future.successful {
-      val u = User(10, "Mohith Thimmaiah", 44)
-      logger.info(s"UserAction1 by ${u}")
-      new UserRequest(u, request)
-    }
-
-    def PermissionCheckAction(implicit ec: ExecutionContext) =
-      new ActionFilter[Request] {
-
-        def executionContext = ec
-
-        def filter[A](request: Request[A]) = Future.successful {
-          val jwtToken = request.headers.get("authorization").getOrElse("")
-
-          if (jwtUtils.isValidToken(jwtToken)) {
-            jwtUtils.decodePayload(jwtToken) match {
-              case Success(json) => None
-              case Failure(_)    => Some(Forbidden)
-            }
-          } else
-            Some(Forbidden)
-
-        }
-      }
-
-  }
-
+  
   /**
    *  This action is used to extract the jwt token and enrich the request with the User 
   */
