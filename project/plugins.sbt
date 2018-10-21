@@ -9,3 +9,5 @@ addSbtPlugin("io.gatling" % "gatling-sbt" % "2.2.2")
 
 // Scala formatting: "sbt scalafmt"
 addSbtPlugin("com.lucidchart" % "sbt-scalafmt" % "1.12")
+
+addSbtPlugin("com.typesafe.sbteclipse" % "sbteclipse-plugin" % "5.2.4")

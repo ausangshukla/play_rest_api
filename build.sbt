@@ -30,6 +30,8 @@ libraryDependencies ++= Seq(
   "mysql" % "mysql-connector-java" % "6.0.6"
 )
 
+libraryDependencies += "com.pauldijou" %% "jwt-play-json" % "0.18.0"
+
 // The Play project itself
 lazy val root = (project in file("."))
   .enablePlugins(Common, PlayScala, GatlingPlugin)

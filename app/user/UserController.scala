@@ -6,17 +6,23 @@ import play.api.Logger
 import play.api.data.Form
 import play.api.libs.json._
 import play.api.mvc._
+import controllers._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UserController @Inject()(cc: ControllerComponents, repo: UserRepository)(implicit ec: ExecutionContext) 
+class UserController @Inject()(userAction: AuthAction.UserAction, jwtAction: AuthAction.JWTAction, cc: ControllerComponents, repo: UserRepository, jwtUtils: JwtUtils)(implicit ec: ExecutionContext) 
 extends AbstractController(cc) {
 
     private val logger:Logger = Logger(this.getClass())
     import UserSerialization._
 
-    def index = Action.async { request =>
-        logger.info("index:")
+    def index = (jwtAction).async { request =>
+
+        logger.debug(s"Requested by ${request.user}")
+        request.headers.get("authorization").map {token => 
+            val claims = jwtUtils.decodePayload(token)
+            logger.info(s"index $claims")
+        }
         repo.list().map { users =>
             Ok(Json.toJson(users))
         }

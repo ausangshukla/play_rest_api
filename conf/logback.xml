@@ -54,7 +54,9 @@
   <logger name="play" level="INFO" />
   <logger name="application" level="DEBUG" />
   <logger name="user" level="DEBUG" />
-
+  <logger name="controllers" level="DEBUG" />
+  <logger name="slick.jdbc" level="DEBUG" />
+  
   <root level="WARN">
     <appender-ref ref="ASYNCFILE" />
     <appender-ref ref="ASYNCJSON" />

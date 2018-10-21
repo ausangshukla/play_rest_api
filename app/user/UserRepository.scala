@@ -9,6 +9,8 @@ import scala.concurrent.{ Future, ExecutionContext }
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.language.postfixOps
+import play.api.Logger
+
 /**
  * A repository for users.
  *
@@ -18,6 +20,7 @@ import scala.language.postfixOps
 class UserRepository @Inject() (@NamedDatabase("mysql") dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
   // We want the JdbcProfile for this provider
   private val dbConfig = dbConfigProvider.get[JdbcProfile]
+  private val logger: Logger = Logger(this.getClass())
 
   // These imports are important, the first one brings db into scope, which will let you do the actual db operations.
   // The second one brings the Slick DSL into scope, which lets you define the table and other queries.
