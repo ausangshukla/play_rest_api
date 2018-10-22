@@ -24,7 +24,7 @@ extends AbstractController(cc) {
         }
     }
 
-    def show(id:Long) = Action.async { request =>
+    def show(id:Long) = jwtAction.async { request =>
         logger.info(s"show $id")
         repo.find(id).map { user =>
             logger.info(s"show $user")
@@ -37,14 +37,14 @@ extends AbstractController(cc) {
         
     }
 
-    def add = Action.async (parse.json[User]) { request =>
+    def add = jwtAction.async (parse.json[User]) { request =>
         val u:User = request.body
         repo.create(u).map { addedUser =>
             Created(Json.toJson(addedUser))
         }
     }
 
-    def delete(id:Long) = Action.async { request =>
+    def delete(id:Long) = jwtAction.async { request =>
         logger.info(s"delete $id")
         repo.delete(id).map { x =>
             logger.info(s"delete $x")

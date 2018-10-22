@@ -41,3 +41,13 @@ lazy val root = (project in file("."))
     name := """rest-api""",
     scalaSource in GatlingTest := baseDirectory.value / "/gatling/simulation"
   )
+
+
+initialCommands in console := """
+  |import play.api._
+  |val env = Environment(new java.io.File("."), this.getClass.getClassLoader, Mode.Dev)
+  |val context = ApplicationLoader.createContext(env)
+  |val loader = ApplicationLoader(context)
+  |val app = loader.load(context)
+  |Play.start(app)
+""".trim.stripMargin

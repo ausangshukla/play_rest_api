@@ -68,7 +68,7 @@ class UserRepository @Inject() (@NamedDatabase("mysql") dbConfigProvider: Databa
 
    // Helper method for running a query in this example file:
   def exec[T](program: DBIO[T]): T = Await.result(db.run(program), 2 seconds)
-
+  def await[T](f: Future[T]): T = Await.result(f, 2 seconds)
   /**
    * List all the users in the database.
    */
@@ -99,4 +99,21 @@ class UserRepository @Inject() (@NamedDatabase("mysql") dbConfigProvider: Databa
     users.filter(_.id === id).delete
   }
   
+  def update(user: User): Future[Option[User]] = db.run {
+    users.filter(_.id === user.id).update(user).map {
+      case 0 => None
+      case _ => Some(user)
+    }
+  }
+  
+}
+
+object UserRepository {
+  /**
+   * Used to get a ref to the UserRepository from the console
+   */
+  def fromConsole(app: play.api.Application) = {
+    val c = Class.forName("user.UserRepository")
+    app.injector.instanceOf(c).asInstanceOf[user.UserRepository]
+  }
 }
