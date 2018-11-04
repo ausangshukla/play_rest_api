@@ -77,7 +77,7 @@ class UserRepository @Inject() (@NamedDatabase("mysql") dbConfigProvider: Databa
   }
 
  
-  def create(u:User) = db.run {
+  def create(u:User): Future[User] = db.run {
     val usersReturningRow =
     users returning users.map(_.id) into { (user, id) =>
       user.copy(id = id)
@@ -87,7 +87,7 @@ class UserRepository @Inject() (@NamedDatabase("mysql") dbConfigProvider: Databa
   }
 
 
-  def find(id:Long) = db.run {
+  def find(id:Long) : Future[Option[User]] = db.run {
     val q = for {
       u <- users if u.id === id
     } yield(u)
@@ -95,7 +95,7 @@ class UserRepository @Inject() (@NamedDatabase("mysql") dbConfigProvider: Databa
     q.result.headOption
   }
 
-  def delete(id:Long) = db.run {
+  def delete(id:Long):Future[Int] = db.run {
     users.filter(_.id === id).delete
   }
   

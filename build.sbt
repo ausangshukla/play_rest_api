@@ -31,6 +31,11 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies += "com.pauldijou" %% "jwt-play-json" % "0.18.0"
+libraryDependencies += "org.typelevel" %% "cats-core" % "1.4.0"
+libraryDependencies += "io.kanaka" %% "play-monadic-actions" % "2.1.0"
+libraryDependencies += "io.kanaka" %% "play-monadic-actions-cats" % "2.1.0"
+
+libraryDependencies += "com.alexitc" %% "play-request-tracer" % "0.1.0"
 
 // The Play project itself
 lazy val root = (project in file("."))
@@ -51,3 +56,5 @@ initialCommands in console := """
   |val app = loader.load(context)
   |Play.start(app)
 """.trim.stripMargin
+
+scalacOptions += "-Ypartial-unification"
